@@ -1,1 +1,1 @@
-# Tasks on the subject of information security at SSU
+# SSU Formal Languages Theory tasks
