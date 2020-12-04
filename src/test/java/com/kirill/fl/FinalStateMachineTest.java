@@ -3,6 +3,7 @@ package com.kirill.fl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.kirill.fl.domain.FinalStateMachine;
+import com.kirill.fl.domain.FinalStateMachineImpl;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -14,7 +15,7 @@ public class FinalStateMachineTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final CollectionType javaType = objectMapper.getTypeFactory()
-            .constructCollectionType(List.class, FinalStateMachine.class);
+            .constructCollectionType(List.class, FinalStateMachineImpl.class);
 
     @Test
     public void testMachine() throws IOException {
@@ -38,5 +39,29 @@ public class FinalStateMachineTest {
         number.nextState("2");
 
         Assert.assertEquals(number.getCurrentState(), "q1");
+    }
+
+    @Test
+    public void testFind() throws IOException {
+
+        List<FinalStateMachine> keywords = objectMapper.readValue(new File("./src/test/resources/keyword.json"), javaType);
+        FinalStateMachine keyword = keywords.get(0);
+
+        boolean found = keyword.find("begin", 0).getKey();
+
+        Assert.assertEquals(keyword.getCurrentState(), "q5");
+        Assert.assertTrue(found);
+    }
+
+    @Test
+    public void testFindBad() throws IOException {
+
+        List<FinalStateMachine> keywords = objectMapper.readValue(new File("./src/test/resources/keyword.json"), javaType);
+        FinalStateMachine keyword = keywords.get(0);
+
+        boolean found = keyword.find("beg", 0).getKey();
+
+        Assert.assertEquals(keyword.getCurrentState(), "q3");
+        Assert.assertFalse(found);
     }
 }
