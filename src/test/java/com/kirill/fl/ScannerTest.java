@@ -46,7 +46,7 @@ public class ScannerTest {
     @Test
     void scannerTest() throws IOException {
 
-        String lexerJava = "begin +123;";
+        String lexerJava = "begin +123.;";
 
         Scanner scanner = new Scanner(machines);
         scanner.scan(lexerJava);

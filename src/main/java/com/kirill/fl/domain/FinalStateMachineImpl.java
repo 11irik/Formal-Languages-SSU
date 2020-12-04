@@ -28,6 +28,7 @@ public class FinalStateMachineImpl implements FinalStateMachine {
 
     @Override
     public AbstractMap.SimpleEntry<Boolean, Integer> find(String token, int offset) {
+        this.currentState = start;
         int counter = 0;
         boolean isCorrect = true;
         for (int i = offset; i < token.length(); i++) {
