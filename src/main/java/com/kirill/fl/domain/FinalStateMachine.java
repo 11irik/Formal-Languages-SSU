@@ -8,4 +8,6 @@ public interface FinalStateMachine {
     public boolean nextState(String word);
 
     public String getCurrentState();
+
+    public int getRank();
 }

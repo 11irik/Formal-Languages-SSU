@@ -64,4 +64,15 @@ public class FinalStateMachineTest {
         Assert.assertEquals(keyword.getCurrentState(), "q3");
         Assert.assertFalse(found);
     }
+
+    @Test
+    public void longerLineTest() throws IOException {
+
+        List<FinalStateMachine> keywords = objectMapper.readValue(new File("./src/test/resources/keyword.json"), javaType);
+        FinalStateMachine keyword = keywords.get(0);
+
+        boolean found = keyword.find("begin and something more", 0).getKey();
+
+        Assert.assertTrue(found);
+    }
 }

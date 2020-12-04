@@ -32,7 +32,6 @@ public class FinalStateMachineImpl implements FinalStateMachine {
         boolean isCorrect = true;
         for (int i = offset; i < token.length(); i++) {
             if (!nextState(String.valueOf(token.charAt(i)))) {
-                isCorrect = false;
                 break;
             }
             counter++;
@@ -67,5 +66,10 @@ public class FinalStateMachineImpl implements FinalStateMachine {
     @Override
     public String getCurrentState() {
         return currentState;
+    }
+
+    @Override
+    public int getRank() {
+        return rank;
     }
 }
