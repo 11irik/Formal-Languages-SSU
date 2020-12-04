@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.List;
 
 public class FinalStateMachineTest {
@@ -71,8 +72,32 @@ public class FinalStateMachineTest {
         List<FinalStateMachine> keywords = objectMapper.readValue(new File("./src/test/resources/keyword.json"), javaType);
         FinalStateMachine keyword = keywords.get(0);
 
-        boolean found = keyword.find("begin and something more", 0).getKey();
+        AbstractMap.SimpleEntry<Boolean, Integer> result = keyword.find("begin and something more", 0);
 
-        Assert.assertTrue(found);
+        int pos = result.getValue();
+        Assert.assertTrue(result.getKey());
+        Assert.assertEquals(pos, 5);
+    }
+
+    @Test
+    public void offsetTest() throws IOException {
+
+        List<FinalStateMachine> keywords = objectMapper.readValue(new File("./src/test/resources/keyword.json"), javaType);
+        FinalStateMachine keyword = keywords.get(0);
+
+        AbstractMap.SimpleEntry<Boolean, Integer> result = keyword.find("offset begin", 7);
+
+        Assert.assertTrue(result.getKey());
+    }
+
+    @Test
+    public void offsetWhiteSpaceTest() throws IOException {
+
+        List<FinalStateMachine> keywords = objectMapper.readValue(new File("./src/test/resources/whitespace.json"), javaType);
+        FinalStateMachine keyword = keywords.get(0);
+
+        AbstractMap.SimpleEntry<Boolean, Integer> result = keyword.find("k ", 1);
+
+        Assert.assertTrue(result.getKey());
     }
 }
