@@ -3,11 +3,15 @@ package com.kirill.fl.domain;
 import java.util.AbstractMap;
 
 public interface FinalStateMachine {
-    public AbstractMap.SimpleEntry<Boolean, Integer> find(String token, int offset);
+    AbstractMap.SimpleEntry<Boolean, Integer> find(String token, int offset);
 
-    public boolean nextState(String word);
+    boolean nextState(String word);
 
-    public String getCurrentState();
+    String getCurrentState();
 
-    public int getRank();
+    int getRank();
+
+    void setClassName(String className);
+
+    String getClassName();
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.kirill.fl.domain.FinalStateMachine;
 import com.kirill.fl.domain.FinalStateMachineImpl;
 import com.kirill.fl.domain.Scanner;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,7 @@ public class ScannerTest {
         machinesPaths.forEach(path -> {
             try {
                 List<FinalStateMachine> group = objectMapper.readValue(new File(path.toString()), javaType);
+                group.forEach(machine -> machine.setClassName(path.toFile().getName().split("\\.")[0]));
                 machines.addAll(group);
             } catch (IOException exception) {
                 exception.printStackTrace();
@@ -49,6 +52,21 @@ public class ScannerTest {
         String lexerJava = "begin +123.;";
 
         Scanner scanner = new Scanner(machines);
-        scanner.scan(lexerJava);
+        List<AbstractMap.SimpleEntry<String, String>> lexemes = scanner.scan(lexerJava);
+
+        Assert.assertEquals(lexemes.get(0).getKey(), "begin");
+        Assert.assertEquals(lexemes.get(0).getValue(), "keyword");
+
+        Assert.assertEquals(lexemes.get(1).getKey(), " ");
+        Assert.assertEquals(lexemes.get(1).getValue(), "whitespace");
+
+        Assert.assertEquals(lexemes.get(2).getKey(), "+123");
+        Assert.assertEquals(lexemes.get(2).getValue(), "number");
+
+        Assert.assertEquals(lexemes.get(3).getKey(), ".");
+        Assert.assertEquals(lexemes.get(3).getValue(), "spec");
+
+        Assert.assertEquals(lexemes.get(4).getKey(), ";");
+        Assert.assertEquals(lexemes.get(4).getValue(), "spec");
     }
 }

@@ -19,6 +19,7 @@ public class FinalStateMachineImpl implements FinalStateMachine {
     private Map<String, List<String>> inputs;
     private Map<String, Map<String, String>> matrix;
     private String currentState;
+    private String className;
 
     @JsonCreator
     public FinalStateMachineImpl(@JsonProperty("start") final String start) {
@@ -72,5 +73,15 @@ public class FinalStateMachineImpl implements FinalStateMachine {
     @Override
     public int getRank() {
         return rank;
+    }
+
+    @Override
+    public void setClassName(String className){
+        this.className = className;
+    }
+
+    @Override
+    public String getClassName(){
+        return className;
     }
 }

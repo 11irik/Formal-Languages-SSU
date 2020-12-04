@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,14 @@ public class Scanner {
     private List<FinalStateMachine> machines;
     public static final double POSITIVE_INFINITY = 1.0 / 0.0;
 
-    public void scan(String str) {
+    public List<AbstractMap.SimpleEntry<String, String>> scan(String str) {
+        List<AbstractMap.SimpleEntry<String, String>> lexemes = new ArrayList<>();
         int offset = 0;
 
         String resultLexeme = "";
         int lexemeOffset = 0;
         int lexemeRank = (int) POSITIVE_INFINITY;
+        String lexemeClass = "";
 
         while (offset < str.length()) {
             for (FinalStateMachine machine : machines) {
@@ -32,17 +35,21 @@ public class Scanner {
                         resultLexeme = lexeme;
                         lexemeRank = machine.getRank();
                         lexemeOffset = result.getValue();
+                        lexemeClass = machine.getClassName();
                     } else if (resultLexeme.length() == lexeme.length() && lexemeRank > machine.getRank()) {
                         resultLexeme = lexeme;
                         lexemeRank = machine.getRank();
                         lexemeOffset = result.getValue();
+                        lexemeClass = machine.getClassName();
                     }
                 }
             }
-            System.out.println(resultLexeme);
+            lexemes.add(new AbstractMap.SimpleEntry<>(resultLexeme, lexemeClass));
             offset += lexemeOffset;
             resultLexeme = "";
             lexemeRank = (int) POSITIVE_INFINITY;
         }
+
+        return lexemes;
     }
 }
